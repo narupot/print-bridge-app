@@ -20,13 +20,15 @@
   "build": {
     "appId": "com.restaurant.print-bridge",
     "productName": "Print Bridge",
+    "artifactName": "PrintBridgeSetup.${ext}",
     "directories": {
       "output": "dist"
     },
     "files": [
       "main.js",
       "preload.js",
-      "renderer/**"
+      "renderer/**",
+      "assets/**"
     ],
     "win": {
       "target": [
@@ -46,8 +48,7 @@
       "allowToChangeInstallationDirectory": false,
       "deleteAppDataOnUninstall": false,
       "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
-      "artifactName": "PrintBridgeSetup.exe"
+      "uninstallerIcon": "assets/icon.ico"
     }
   },
   "allowScripts": {

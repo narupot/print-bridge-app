@@ -25,6 +25,8 @@ jobs:
 
       - name: Build installer
         run: npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -38,5 +40,5 @@ jobs:
             2. ดับเบิลคลิกเพื่อติดตั้ง
             3. เปิดหน้า **เครื่องปริ้น** ในระบบ → กด **"คัดลอก Bridge Code"** → วางในแอป
             4. ไอคอนเปลี่ยนเป็นสีเขียว = เชื่อมต่อสำเร็จ ✓
-          files: dist/PrintBridgeSetup.exe
+          files: dist/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
