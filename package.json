@@ -46,7 +46,8 @@
       "allowToChangeInstallationDirectory": false,
       "deleteAppDataOnUninstall": false,
       "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico"
+      "uninstallerIcon": "assets/icon.ico",
+      "artifactName": "PrintBridgeSetup.exe"
     }
   },
   "allowScripts": {

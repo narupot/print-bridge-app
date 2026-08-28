@@ -1,0 +1,42 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build installer
+        run: npm run build
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Print Bridge ${{ github.ref_name }}
+          body: |
+            ## 🖨 Print Bridge ${{ github.ref_name }}
+
+            ### วิธีติดตั้ง
+            1. ดาวน์โหลด **PrintBridgeSetup.exe** ด้านล่าง
+            2. ดับเบิลคลิกเพื่อติดตั้ง
+            3. เปิดหน้า **เครื่องปริ้น** ในระบบ → กด **"คัดลอก Bridge Code"** → วางในแอป
+            4. ไอคอนเปลี่ยนเป็นสีเขียว = เชื่อมต่อสำเร็จ ✓
+          files: dist/PrintBridgeSetup.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
