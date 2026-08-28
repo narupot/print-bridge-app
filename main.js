@@ -79,6 +79,7 @@ function updateTray() {
     { type: 'separator' },
     { label: 'ตั้งค่า...', click: showSetup },
     { label: 'เชื่อมต่อใหม่', click: reconnect, enabled: !!config },
+    { label: 'คู่มือการใช้งาน', click: showGuide },
     { type: 'separator' },
     { label: 'ออกจากโปรแกรม', click: () => { cleanup(); app.exit(0); } },
   ]));
@@ -166,9 +167,25 @@ function showSetup() {
   setupWin.on('closed', () => { setupWin = null; });
 }
 
+// ── Guide window ──────────────────────────────────────────────────────────────
+let guideWin = null;
+function showGuide() {
+  if (guideWin && !guideWin.isDestroyed()) { guideWin.focus(); return; }
+  guideWin = new BrowserWindow({
+    width: 660,
+    height: 720,
+    title: 'Print Bridge — คู่มือการใช้งาน',
+    webPreferences: { contextIsolation: true, nodeIntegration: false },
+  });
+  guideWin.loadFile(path.join(__dirname, 'renderer', 'guide.html'));
+  guideWin.setMenu(null);
+  guideWin.on('closed', () => { guideWin = null; });
+}
+
 // ── IPC handlers ──────────────────────────────────────────────────────────────
 ipcMain.handle('get-config',  () => config);
 ipcMain.handle('get-status',  () => connected);
+ipcMain.handle('open-guide',  () => showGuide());
 ipcMain.handle('save-config', (_, c) => {
   saveConfig(c);
   reconnect();

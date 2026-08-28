@@ -123,6 +123,7 @@
 </div>
 
 <div class="footer">
+  <button class="btn-secondary" id="btnGuide" style="margin-right:auto">📖 คู่มือ</button>
   <button class="btn-secondary" id="btnCancel">ยกเลิก</button>
   <button class="btn-primary" id="btnSave">บันทึกและเชื่อมต่อ</button>
 </div>
@@ -147,6 +148,7 @@
   });
 
   document.getElementById('btnCancel').addEventListener('click', () => window.close());
+  document.getElementById('btnGuide').addEventListener('click', () => window.bridge.openGuide());
 
   init();
 </script>
