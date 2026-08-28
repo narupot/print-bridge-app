@@ -149,6 +149,9 @@ function cleanup() {
 }
 
 // ── Setup window ──────────────────────────────────────────────────────────────
+const ICON_PATH = path.join(__dirname, 'assets', 'icon.png');
+const WIN_ICON  = fs.existsSync(ICON_PATH) ? ICON_PATH : undefined;
+
 function showSetup() {
   if (setupWin && !setupWin.isDestroyed()) { setupWin.focus(); return; }
   setupWin = new BrowserWindow({
@@ -156,6 +159,7 @@ function showSetup() {
     height: 480,
     resizable: false,
     title: 'Print Bridge — ตั้งค่า',
+    icon: WIN_ICON,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -175,6 +179,7 @@ function showGuide() {
     width: 660,
     height: 720,
     title: 'Print Bridge — คู่มือการใช้งาน',
+    icon: WIN_ICON,
     webPreferences: { contextIsolation: true, nodeIntegration: false },
   });
   guideWin.loadFile(path.join(__dirname, 'renderer', 'guide.html'));

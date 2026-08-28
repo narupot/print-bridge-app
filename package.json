@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "icons": "node scripts/generate-icon.js",
     "build": "electron-builder --win --x64"
   },
   "dependencies": {
@@ -12,7 +13,9 @@
   },
   "devDependencies": {
     "electron": "^32.2.0",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "jimp": "^0.22.12",
+    "to-ico": "^1.1.5"
   },
   "build": {
     "appId": "com.restaurant.print-bridge",
