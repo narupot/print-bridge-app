@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>Print Bridge — ตั้งค่า</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0E0F16;
+    color: #E4E0DA;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+  .header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(145deg,#E8963C,#B8661A);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-title { font-size: 17px; font-weight: 700; color: #F3EFE8; }
+  .logo-sub   { font-size: 11px; color: #565350; margin-top: 2px; }
+  .body { padding: 24px 28px; flex: 1; }
+  .step {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #9B9690;
+  }
+  .step strong { color: #E4E0DA; }
+  .step ol { padding-left: 18px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: #9B9690; margin-bottom: 6px; letter-spacing: 0.5px; }
+  textarea {
+    width: 100%;
+    height: 90px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #E4E0DA;
+    font-size: 12px;
+    font-family: monospace;
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: rgba(232,150,60,0.5); }
+  textarea::placeholder { color: #3D3B38; }
+  .error {
+    font-size: 12px;
+    color: #F87171;
+    margin-top: 8px;
+    display: none;
+  }
+  .footer {
+    padding: 16px 28px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  button {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.85; }
+  .btn-primary {
+    background: linear-gradient(135deg,#E8963C,#B8661A);
+    color: #fff;
+  }
+  .btn-secondary {
+    background: rgba(255,255,255,0.07);
+    color: #9B9690;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🖨</div>
+    <div>
+      <div class="logo-title">Print Bridge</div>
+      <div class="logo-sub">เชื่อมต่อเครื่องปริ้น LAN กับระบบ cloud</div>
+    </div>
+  </div>
+</div>
+
+<div class="body">
+  <div class="step">
+    <ol>
+      <li>เปิดหน้า <strong>จัดการเครื่องปริ้น</strong> ในระบบร้านอาหาร</li>
+      <li>กดปุ่ม <strong>"คัดลอก Bridge Code"</strong></li>
+      <li>วาง code ด้านล่างแล้วกด <strong>"บันทึกและเชื่อมต่อ"</strong></li>
+    </ol>
+  </div>
+
+  <label>BRIDGE CODE</label>
+  <textarea id="code" placeholder="วาง code ที่คัดลอกมาจากระบบ..."></textarea>
+  <div class="error" id="err">Code ไม่ถูกต้อง กรุณาคัดลอกใหม่จากหน้าเครื่องปริ้น</div>
+</div>
+
+<div class="footer">
+  <button class="btn-secondary" id="btnCancel">ยกเลิก</button>
+  <button class="btn-primary" id="btnSave">บันทึกและเชื่อมต่อ</button>
+</div>
+
+<script>
+  async function init() {
+    const cfg = await window.bridge.getConfig();
+    // If already configured, no pre-fill needed (setup code contains new token)
+  }
+
+  document.getElementById('btnSave').addEventListener('click', async () => {
+    const raw = document.getElementById('code').value.trim();
+    const err = document.getElementById('err');
+    err.style.display = 'none';
+    try {
+      const decoded = JSON.parse(atob(raw));
+      if (!decoded.apiUrl || !decoded.token) throw new Error('missing fields');
+      await window.bridge.saveConfig(decoded);
+    } catch {
+      err.style.display = 'block';
+    }
+  });
+
+  document.getElementById('btnCancel').addEventListener('click', () => window.close());
+
+  init();
+</script>
+</body>
+</html>
