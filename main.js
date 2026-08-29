@@ -198,8 +198,22 @@ ipcMain.handle('save-config', (_, c) => {
   return true;
 });
 
+// ── Single instance + custom protocol ────────────────────────────────────────
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  // Second instance triggered (e.g. browser opened print-bridge://) — just stay alive
+  app.on('second-instance', () => {
+    if (setupWin && !setupWin.isDestroyed()) setupWin.focus();
+  });
+}
+
 // ── App ready ─────────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
+  // Register print-bridge:// URL scheme so browsers can launch/wake this app
+  app.setAsDefaultProtocolClient('print-bridge');
+
   // Auto-start on Windows login (hidden — no window on startup)
   app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
 
